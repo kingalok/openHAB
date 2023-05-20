@@ -1,0 +1,31 @@
+apiVersion: dynamodb.aws.upbound.io/v1beta1
+kind: Table
+metadata:
+  name: customer
+spec:
+  forProvider:
+    region: eu-west-2
+    attribute:
+    - name: CustomerID
+      type: S
+    - name: CustomerName
+      type: S
+    - name: Date
+      type: "S"
+    billingMode: PROVISIONED
+    globalSecondaryIndex:
+    - hashKey: CustomerName
+      name: CustomerNameIndex
+      nonKeyAttributes:
+      - CustomerID
+      projectionType: INCLUDE
+      rangeKey: Date
+      readCapacity: 5
+      writeCapacity: 5
+    hashKey: CustomerID
+    rangeKey: CustomerName
+    readCapacity: 5
+    tags:
+      Environment: production
+      Name: customer
+    writeCapacity: 5

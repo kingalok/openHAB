@@ -1,0 +1,31 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: customerinstances
+  namespace: argocd
+spec:
+  generators:
+  - git:
+      repoURL: https://git-codecommit.eu-west-2.amazonaws.com/v1/repos/openHAB
+      revision: HEAD 
+      directories:
+      - path: Infra/AWS/customers/*
+  template:
+    metadata:
+      name: '{{path.basename}}'
+    spec:
+      project: default
+      source:
+        repoURL: https://git-codecommit.eu-west-2.amazonaws.com/v1/repos/openHAB
+        targetRevision: HEAD
+        path: ./Infra/AWS/Application/
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: '{{path.basename}}'
+      syncPolicy:
+        syncOptions:
+          - CreateNamespace=true 
+        automated:
+          prune: true
+          allowEmpty: false
+          selfHeal: true

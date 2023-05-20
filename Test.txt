@@ -1,0 +1,140 @@
+ArgoCD:
+
+kubectl port-forward svc/argocd-server -n argocd 8080:443
+kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo
+https://localhost:8080/
+
+Tekton:
+
+kubectl --namespace tekton-pipelines port-forward svc/tekton-dashboard 9097:9097
+
+Linkerd Dashboard:
+
+linkerd viz dashboard
+
+emojito:
+kubectl -n emojivoto port-forward svc/web-svc 8089:80
+
+Docs:
+Home Assistant:
+https://youtu.be/DK_Gdtn_wvw
+https://github.com/techno-tim/techno-tim.github.io
+https://community.home-assistant.io/t/kubernetes-vs-supervisor/184415/32
+https://github.com/hyperbolic2346/kubernetes/tree/master/homeassistant
+https://github.com/theautomation/home-assistant/tree/main/deploy
+https://gist.github.com/cerebrate/361e901804782a89d269d97aed47c9e7
+https://github.com/billimek/k8s-gitops/tree/master/default/home-assistant
+
+OpenHAB:
+https://gist.github.com/jannegpriv/e2acf3f4dcaa1b2dfe01d6d82e4a7072
+
+#########################
+Crossplane Installation:
+#########################
+
+https://marketplace.upbound.io/providers/upbound/provider-aws/v0.26.0/docs/quickstart
+
+1)
+Download and install the Upbound up command-line.
+
+curl -sL "https://cli.upbound.io" | sh
+sudo mv up /usr/local/bin/
+Alok_Sharma@EPGBLIVW0020 aws % up --version
+v0.15.0
+
+2)
+Install Upbound Universal Crossplane
+Install Upbound Universal Crossplane (UXP) with the Up command-line up uxp install command.
+
+$ up uxp install
+Alok_Sharma@EPGBLIVW0020 aws % up uxp install
+UXP 1.10.1-up.1 installed
+
+Alok_Sharma@EPGBLIVW0020 crossplane % kubectl get pods -n upbound-system     
+NAME                                       READY   STATUS    RESTARTS        AGE
+upbound-bootstrapper-754f65bd-pcjjs        1/1     Running   0               5m46s
+crossplane-rbac-manager-7978c5f8df-kdcsz   1/1     Running   0               5m46s
+crossplane-ddc974f67-kklwf                 1/1     Running   0               5m46s
+xgql-8fb949dcf-d8hbf                       1/1     Running   2 (5m36s ago)   5m46s
+
+
+3)
+Install the official AWS provider
+Install the official provider into the Kubernetes cluster with a Kubernetes configuration file.
+
+kubectl apply -f aws-provider.yaml
+
+or
+cat <<EOF | kubectl apply -f -
+---
+apiVersion: pkg.crossplane.io/v1
+kind: Provider
+metadata:
+  name: provider-aws
+spec:
+  package: xpkg.upbound.io/upbound/provider-aws:v0.26.0
+EOF
+
+Alok_Sharma@EPGBLIVW0020 crossplane % k get providers           
+NAME           INSTALLED   HEALTHY   PACKAGE                                        AGE
+provider-aws   True        True      xpkg.upbound.io/upbound/provider-aws:v0.26.0   13m
+
+4) Create AWS credentials in k8s secrets.
+
+kubectl create secret \
+generic aws-secret \
+-n upbound-system \
+--from-file=creds=./aws-credentials.txt
+
+
+Alok_Sharma@EPGBLIVW0020 aws % kubectl create secret generic aws-secret -n upbound-system --from-file=creds=creds.conf
+secret/aws-secret created
+
+5) Configure AWS Provider.
+
+Alok_Sharma@EPGBLIVW0020 crossplane % k create -f aws-provider-config.yaml 
+providerconfig.aws.upbound.io/default created
+
+
+6) Testing.
+
+bucket=$(echo "upbound-bucket-"$(head -n 4096 /dev/urandom | openssl sha1 | tail -c 10))
+CAT <<EOF | kubectl apply -f -
+apiVersion: s3.aws.upbound.io/v1beta1
+kind: Bucket
+metadata:
+  name: $bucket
+spec:
+  forProvider:
+    region: eu-west-2
+  providerConfigRef:
+    name: default
+EOF
+
+Alok_Sharma@EPGBLIVW0020 crossplane % k get bucket                                                                            
+NAME                       READY   SYNCED   EXTERNAL-NAME              AGE
+upbound-bucket-d123274cf   False   True     upbound-bucket-d123274cf   6s
+Alok_Sharma@EPGBLIVW0020 crossplane % k get bucket
+NAME                       READY   SYNCED   EXTERNAL-NAME              AGE
+upbound-bucket-d123274cf   True    True     upbound-bucket-d123274cf   94s
+Alok_Sharma@EPGBLIVW0020 crossplane % 
+
+
+#########################
+ArgoCD Installation
+#########################
+
+1. Install Argo CD
+
+kubectl create namespace argocd
+kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+
+or
+
+kubectl create -f argocd/argocd-install.yaml -n argocd
+
+2. Login to Argocd.
+3. Generate codecommit user in aws console.
+4. Create credentials template in argocd.
+5. Create aws-infra and request-watcher application in argocd console.
+6. Create linkerd application in argocd console.

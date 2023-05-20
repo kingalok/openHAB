@@ -1,0 +1,12 @@
+apiVersion: codecommit.aws.upbound.io/v1beta1
+kind: Repository
+metadata:
+  name: openhab-aws
+  annotations:
+    meta.upbound.io/example-id: codecommit/v1beta1/repository
+  labels:
+    testing.upbound.io/example-name: openhab-aws
+spec:
+  forProvider:
+    description: This is the Sample App Repository
+    region: eu-west-2

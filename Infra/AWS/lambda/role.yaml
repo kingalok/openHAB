@@ -1,0 +1,42 @@
+---
+apiVersion: iam.aws.upbound.io/v1beta1
+kind: RolePolicyAttachment
+metadata:
+  name: openhab-policy-attachment
+  labels:
+    testing.upbound.io/example-name: role
+spec:
+  forProvider:
+    policyArnSelector:
+      matchLabels:
+        testing.upbound.io/example-name: openhab-user-policy
+    roleSelector:
+      matchLabels:
+        testing.upbound.io/example-name: openhab-lambda-role
+---
+apiVersion: iam.aws.upbound.io/v1beta1
+kind: Policy
+metadata:
+  name: openhab-user-policy
+  labels:
+    testing.upbound.io/example-name: openhab-user-policy
+spec:
+  forProvider:
+    policy: |
+      {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+              "Sid": "VisualEditor0",
+              "Effect": "Allow",
+              "Action": "codecommit:*",
+              "Resource": "*"
+         },
+          {
+              "Sid": "VisualEditor1",
+              "Effect": "Allow",
+              "Action": "dynamodb:*",
+              "Resource": "arn:aws:dynamodb:eu-west-2:938172465301:table/customer"
+          }
+        ]
+      }

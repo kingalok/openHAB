@@ -1,0 +1,56 @@
+apiVersion: lambda.aws.upbound.io/v1beta1
+kind: Function
+metadata:
+  annotations:
+    meta.upbound.io/example-id: connect/v1beta1/function
+  labels:
+    testing.upbound.io/example-name: openhab
+  name: openhab
+spec:
+  forProvider:
+    region: eu-west-2
+    environment:
+    - variables:
+        foo: bar
+    s3Bucket: openhab-aws-epam
+    s3Key: code.zip
+    handler: index.lambda_handler
+    roleRef:
+      name: openhab-lambda-role
+    runtime: python3.9
+---
+apiVersion: iam.aws.upbound.io/v1beta1
+kind: Role
+metadata:
+  annotations:
+    meta.upbound.io/example-id: connect/v1beta1/function
+  name: openhab-lambda-role
+  labels:
+    testing.upbound.io/example-name: openhab-lambda-role
+spec:
+  forProvider:
+    assumeRolePolicy: |
+      {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Action": "sts:AssumeRole",
+            "Principal": {
+              "Service": "lambda.amazonaws.com"
+            },
+            "Effect": "Allow",
+            "Sid": ""
+          }
+        ]
+      }
+---
+apiVersion: lambda.aws.upbound.io/v1beta1
+kind: FunctionURL
+metadata:
+  name: openhab
+spec:
+  forProvider:
+    region: eu-west-2
+    authorizationType: NONE
+    functionNameRef:
+      name: openhab

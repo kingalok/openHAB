@@ -1,0 +1,28 @@
+# This is the file used to create request watcher in argocd console.
+
+project: default
+source:
+  repoURL: 'https://git-codecommit.eu-west-2.amazonaws.com/v1/repos/openHAB'
+  path: Infra/AWS/customers
+  targetRevision: HEAD
+destination:
+  server: 'https://kubernetes.default.svc'
+syncPolicy:
+  automated:
+    prune: true
+    selfHeal: true
+
+
+#########
+# This is the file used to create aws infra in argocd console.
+project: default
+source:
+  repoURL: 'https://git-codecommit.eu-west-2.amazonaws.com/v1/repos/openHAB'
+  path: Infra/AWS
+  targetRevision: HEAD
+destination:
+  server: 'https://kubernetes.default.svc'
+syncPolicy:
+  automated:
+    prune: true
+    selfHeal: true

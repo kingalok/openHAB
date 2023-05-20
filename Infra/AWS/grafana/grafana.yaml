@@ -1,0 +1,558 @@
+---
+# Source: grafana/templates/serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    helm.sh/chart: grafana-6.48.0
+    app.kubernetes.io/name: grafana
+    app.kubernetes.io/instance: grafana
+    app.kubernetes.io/version: "9.3.1"
+    app.kubernetes.io/managed-by: Helm
+  name: grafana
+  namespace: default
+---
+# Source: grafana/templates/secret.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: grafana
+  namespace: default
+  labels:
+    helm.sh/chart: grafana-6.48.0
+    app.kubernetes.io/name: grafana
+    app.kubernetes.io/instance: grafana
+    app.kubernetes.io/version: "9.3.1"
+    app.kubernetes.io/managed-by: Helm
+type: Opaque
+data:
+  admin-user: "REMOVED"
+  admin-password: "REMOVED"
+  ldap-toml: ""
+---
+# Source: grafana/templates/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana
+  namespace: default
+  labels:
+    helm.sh/chart: grafana-6.48.0
+    app.kubernetes.io/name: grafana
+    app.kubernetes.io/instance: grafana
+    app.kubernetes.io/version: "9.3.1"
+    app.kubernetes.io/managed-by: Helm
+data:
+  grafana.ini: |
+    [analytics]
+    check_for_updates = false
+    [auth]
+    disable_login_form = true
+    [auth.anonymous]
+    enabled = true
+    org_role = Editor
+    [auth.basic]
+    enabled = false
+    [grafana_net]
+    url = https://grafana.net
+    [log]
+    mode = console
+    [log.console]
+    format = text
+    level = info
+    [panels]
+    disable_sanitize_html = true
+    [paths]
+    data = /var/lib/grafana/
+    logs = /var/log/grafana
+    plugins = /var/lib/grafana/plugins
+    provisioning = /etc/grafana/provisioning
+    [server]
+    domain = ''
+    root_url = %(protocol)s://%(domain)s:/grafana/
+  datasources.yaml: |
+    apiVersion: 1
+    datasources:
+    - access: proxy
+      editable: true
+      isDefault: true
+      jsonData:
+        timeInterval: 5s
+      name: prometheus
+      orgId: 1
+      type: prometheus
+      url: http://prometheus.linkerd-viz.svc.cluster.local:9090
+  dashboardproviders.yaml: |
+    apiVersion: 1
+    providers:
+    - disableDeletion: false
+      editable: true
+      folder: ""
+      name: default
+      options:
+        path: /var/lib/grafana/dashboards/default
+      orgId: 1
+      type: file
+  download_dashboards.sh: |
+    #!/usr/bin/env sh
+    set -euf
+    mkdir -p /var/lib/grafana/dashboards/default
+  
+    curl -skf \
+    --connect-timeout 60 \
+    --max-time 60 \
+    -H "Accept: application/json" \
+    -H "Content-Type: application/json;charset=UTF-8" \
+      "https://grafana.com/api/dashboards/15482/revisions/3/download" \
+      | sed '/-- .* --/! s/"datasource":.*,/"datasource": "prometheus",/g' \
+    > "/var/lib/grafana/dashboards/default/authority.json"
+      
+    curl -skf \
+    --connect-timeout 60 \
+    --max-time 60 \
+    -H "Accept: application/json" \
+    -H "Content-Type: application/json;charset=UTF-8" \
+      "https://grafana.com/api/dashboards/15483/revisions/3/download" \
+      | sed '/-- .* --/! s/"datasource":.*,/"datasource": "prometheus",/g' \
+    > "/var/lib/grafana/dashboards/default/cronjob.json"
+      
+    curl -skf \
+    --connect-timeout 60 \
+    --max-time 60 \
+    -H "Accept: application/json" \
+    -H "Content-Type: application/json;charset=UTF-8" \
+      "https://grafana.com/api/dashboards/15484/revisions/3/download" \
+      | sed '/-- .* --/! s/"datasource":.*,/"datasource": "prometheus",/g' \
+    > "/var/lib/grafana/dashboards/default/daemonset.json"
+      
+    curl -skf \
+    --connect-timeout 60 \
+    --max-time 60 \
+    -H "Accept: application/json" \
+    -H "Content-Type: application/json;charset=UTF-8" \
+      "https://grafana.com/api/dashboards/15475/revisions/6/download" \
+      | sed '/-- .* --/! s/"datasource":.*,/"datasource": "prometheus",/g' \
+    > "/var/lib/grafana/dashboards/default/deployment.json"
+      
+    curl -skf \
+    --connect-timeout 60 \
+    --max-time 60 \
+    -H "Accept: application/json" \
+    -H "Content-Type: application/json;charset=UTF-8" \
+      "https://grafana.com/api/dashboards/15486/revisions/3/download" \
+      | sed '/-- .* --/! s/"datasource":.*,/"datasource": "prometheus",/g' \
+    > "/var/lib/grafana/dashboards/default/health.json"
+      
+    curl -skf \
+    --connect-timeout 60 \
+    --max-time 60 \
+    -H "Accept: application/json" \
+    -H "Content-Type: application/json;charset=UTF-8" \
+      "https://grafana.com/api/dashboards/15487/revisions/3/download" \
+      | sed '/-- .* --/! s/"datasource":.*,/"datasource": "prometheus",/g' \
+    > "/var/lib/grafana/dashboards/default/job.json"
+      
+    curl -skf \
+    --connect-timeout 60 \
+    --max-time 60 \
+    -H "Accept: application/json" \
+    -H "Content-Type: application/json;charset=UTF-8" \
+      "https://grafana.com/api/dashboards/15479/revisions/2/download" \
+      | sed '/-- .* --/! s/"datasource":.*,/"datasource": "prometheus",/g' \
+    > "/var/lib/grafana/dashboards/default/kubernetes.json"
+      
+    curl -skf \
+    --connect-timeout 60 \
+    --max-time 60 \
+    -H "Accept: application/json" \
+    -H "Content-Type: application/json;charset=UTF-8" \
+      "https://grafana.com/api/dashboards/15488/revisions/3/download" \
+      | sed '/-- .* --/! s/"datasource":.*,/"datasource": "prometheus",/g' \
+    > "/var/lib/grafana/dashboards/default/multicluster.json"
+      
+    curl -skf \
+    --connect-timeout 60 \
+    --max-time 60 \
+    -H "Accept: application/json" \
+    -H "Content-Type: application/json;charset=UTF-8" \
+      "https://grafana.com/api/dashboards/15478/revisions/3/download" \
+      | sed '/-- .* --/! s/"datasource":.*,/"datasource": "prometheus",/g' \
+    > "/var/lib/grafana/dashboards/default/namespace.json"
+      
+    curl -skf \
+    --connect-timeout 60 \
+    --max-time 60 \
+    -H "Accept: application/json" \
+    -H "Content-Type: application/json;charset=UTF-8" \
+      "https://grafana.com/api/dashboards/15477/revisions/3/download" \
+      | sed '/-- .* --/! s/"datasource":.*,/"datasource": "prometheus",/g' \
+    > "/var/lib/grafana/dashboards/default/pod.json"
+      
+    curl -skf \
+    --connect-timeout 60 \
+    --max-time 60 \
+    -H "Accept: application/json" \
+    -H "Content-Type: application/json;charset=UTF-8" \
+      "https://grafana.com/api/dashboards/15489/revisions/2/download" \
+      | sed '/-- .* --/! s/"datasource":.*,/"datasource": "prometheus",/g' \
+    > "/var/lib/grafana/dashboards/default/prometheus.json"
+      
+    curl -skf \
+    --connect-timeout 60 \
+    --max-time 60 \
+    -H "Accept: application/json" \
+    -H "Content-Type: application/json;charset=UTF-8" \
+      "https://grafana.com/api/dashboards/15490/revisions/2/download" \
+      | sed '/-- .* --/! s/"datasource":.*,/"datasource": "prometheus",/g' \
+    > "/var/lib/grafana/dashboards/default/prometheus-benchmark.json"
+      
+    curl -skf \
+    --connect-timeout 60 \
+    --max-time 60 \
+    -H "Accept: application/json" \
+    -H "Content-Type: application/json;charset=UTF-8" \
+      "https://grafana.com/api/dashboards/15491/revisions/3/download" \
+      | sed '/-- .* --/! s/"datasource":.*,/"datasource": "prometheus",/g' \
+    > "/var/lib/grafana/dashboards/default/replicaset.json"
+      
+    curl -skf \
+    --connect-timeout 60 \
+    --max-time 60 \
+    -H "Accept: application/json" \
+    -H "Content-Type: application/json;charset=UTF-8" \
+      "https://grafana.com/api/dashboards/15492/revisions/4/download" \
+      | sed '/-- .* --/! s/"datasource":.*,/"datasource": "prometheus",/g' \
+    > "/var/lib/grafana/dashboards/default/replicationcontroller.json"
+      
+    curl -skf \
+    --connect-timeout 60 \
+    --max-time 60 \
+    -H "Accept: application/json" \
+    -H "Content-Type: application/json;charset=UTF-8" \
+      "https://grafana.com/api/dashboards/15481/revisions/3/download" \
+      | sed '/-- .* --/! s/"datasource":.*,/"datasource": "prometheus",/g' \
+    > "/var/lib/grafana/dashboards/default/route.json"
+      
+    curl -skf \
+    --connect-timeout 60 \
+    --max-time 60 \
+    -H "Accept: application/json" \
+    -H "Content-Type: application/json;charset=UTF-8" \
+      "https://grafana.com/api/dashboards/15480/revisions/3/download" \
+      | sed '/-- .* --/! s/"datasource":.*,/"datasource": "prometheus",/g' \
+    > "/var/lib/grafana/dashboards/default/service.json"
+      
+    curl -skf \
+    --connect-timeout 60 \
+    --max-time 60 \
+    -H "Accept: application/json" \
+    -H "Content-Type: application/json;charset=UTF-8" \
+      "https://grafana.com/api/dashboards/15493/revisions/3/download" \
+      | sed '/-- .* --/! s/"datasource":.*,/"datasource": "prometheus",/g' \
+    > "/var/lib/grafana/dashboards/default/statefulset.json"
+      
+    curl -skf \
+    --connect-timeout 60 \
+    --max-time 60 \
+    -H "Accept: application/json" \
+    -H "Content-Type: application/json;charset=UTF-8" \
+      "https://grafana.com/api/dashboards/15474/revisions/4/download" \
+      | sed '/-- .* --/! s/"datasource":.*,/"datasource": "prometheus",/g' \
+    > "/var/lib/grafana/dashboards/default/top-line.json"
+---
+# Source: grafana/templates/dashboards-json-configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-dashboards-default
+  namespace: default
+  labels:
+    helm.sh/chart: grafana-6.48.0
+    app.kubernetes.io/name: grafana
+    app.kubernetes.io/instance: grafana
+    app.kubernetes.io/version: "9.3.1"
+    app.kubernetes.io/managed-by: Helm
+    dashboard-provider: default
+data:
+  {}
+---
+# Source: grafana/templates/clusterrole.yaml
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  labels:
+    helm.sh/chart: grafana-6.48.0
+    app.kubernetes.io/name: grafana
+    app.kubernetes.io/instance: grafana
+    app.kubernetes.io/version: "9.3.1"
+    app.kubernetes.io/managed-by: Helm
+  name: grafana-clusterrole
+rules: []
+---
+# Source: grafana/templates/clusterrolebinding.yaml
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: grafana-clusterrolebinding
+  labels:
+    helm.sh/chart: grafana-6.48.0
+    app.kubernetes.io/name: grafana
+    app.kubernetes.io/instance: grafana
+    app.kubernetes.io/version: "9.3.1"
+    app.kubernetes.io/managed-by: Helm
+subjects:
+  - kind: ServiceAccount
+    name: grafana
+    namespace: default
+roleRef:
+  kind: ClusterRole
+  name: grafana-clusterrole
+  apiGroup: rbac.authorization.k8s.io
+---
+# Source: grafana/templates/role.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: grafana
+  namespace: default
+  labels:
+    helm.sh/chart: grafana-6.48.0
+    app.kubernetes.io/name: grafana
+    app.kubernetes.io/instance: grafana
+    app.kubernetes.io/version: "9.3.1"
+    app.kubernetes.io/managed-by: Helm
+rules:
+  - apiGroups:      ['extensions']
+    resources:      ['podsecuritypolicies']
+    verbs:          ['use']
+    resourceNames:  [grafana]
+---
+# Source: grafana/templates/rolebinding.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: grafana
+  namespace: default
+  labels:
+    helm.sh/chart: grafana-6.48.0
+    app.kubernetes.io/name: grafana
+    app.kubernetes.io/instance: grafana
+    app.kubernetes.io/version: "9.3.1"
+    app.kubernetes.io/managed-by: Helm
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: grafana
+subjects:
+- kind: ServiceAccount
+  name: grafana
+  namespace: default
+---
+# Source: grafana/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: grafana
+  namespace: default
+  labels:
+    helm.sh/chart: grafana-6.48.0
+    app.kubernetes.io/name: grafana
+    app.kubernetes.io/instance: grafana
+    app.kubernetes.io/version: "9.3.1"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: ClusterIP
+  ports:
+    - name: service
+      port: 80
+      protocol: TCP
+      targetPort: 3000
+  selector:
+    app.kubernetes.io/name: grafana
+    app.kubernetes.io/instance: grafana
+---
+# Source: grafana/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grafana
+  namespace: default
+  labels:
+    helm.sh/chart: grafana-6.48.0
+    app.kubernetes.io/name: grafana
+    app.kubernetes.io/instance: grafana
+    app.kubernetes.io/version: "9.3.1"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: grafana
+      app.kubernetes.io/instance: grafana
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: grafana
+        app.kubernetes.io/instance: grafana
+      annotations:
+        checksum/config: 40a7a5b39d0b67e9dace346122ef97310486fcdf82d8a53b415cfffea838f144
+        checksum/dashboards-json-config: 703b33634d715cefba0501f04654c5d6dc28aba46888183ea3420ccdae3c8ecf
+        checksum/sc-dashboard-provider-config: 01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b
+        checksum/secret: 7c9af054ae78fb3db9d7a9e50a44853c60e71b582ea3a37ffb454489d1c29285
+        linkerd.io/inject: enabled
+    spec:
+      
+      serviceAccountName: grafana
+      automountServiceAccountToken: true
+      securityContext:
+        fsGroup: 472
+        runAsGroup: 472
+        runAsUser: 472
+      initContainers:
+        - name: download-dashboards
+          image: "curlimages/curl:7.85.0"
+          imagePullPolicy: IfNotPresent
+          command: ["/bin/sh"]
+          args: [ "-c", "mkdir -p /var/lib/grafana/dashboards/default && /bin/sh -x /etc/grafana/download_dashboards.sh" ]
+          env:
+          volumeMounts:
+            - name: config
+              mountPath: "/etc/grafana/download_dashboards.sh"
+              subPath: download_dashboards.sh
+            - name: storage
+              mountPath: "/var/lib/grafana"
+      enableServiceLinks: true
+      containers:
+        - name: grafana
+          image: "grafana/grafana:9.3.1"
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - name: config
+              mountPath: "/etc/grafana/grafana.ini"
+              subPath: grafana.ini
+            - name: storage
+              mountPath: "/var/lib/grafana"
+            - name: config
+              mountPath: "/etc/grafana/provisioning/datasources/datasources.yaml"
+              subPath: "datasources.yaml"
+            - name: config
+              mountPath: "/etc/grafana/provisioning/dashboards/dashboardproviders.yaml"
+              subPath: "dashboardproviders.yaml"
+          ports:
+            - name: grafana
+              containerPort: 3000
+              protocol: TCP
+          env:
+            - name: GF_SECURITY_ADMIN_USER
+              valueFrom:
+                secretKeyRef:
+                  name: grafana
+                  key: admin-user
+            - name: GF_SECURITY_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: grafana
+                  key: admin-password
+            - name: GF_PATHS_DATA
+              value: /var/lib/grafana/
+            - name: GF_PATHS_LOGS
+              value: /var/log/grafana
+            - name: GF_PATHS_PLUGINS
+              value: /var/lib/grafana/plugins
+            - name: GF_PATHS_PROVISIONING
+              value: /etc/grafana/provisioning
+          livenessProbe:
+            failureThreshold: 10
+            httpGet:
+              path: /api/health
+              port: 3000
+            initialDelaySeconds: 60
+            timeoutSeconds: 30
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: 3000
+      volumes:
+        - name: config
+          configMap:
+            name: grafana
+        - name: dashboards-default
+          configMap:
+            name: grafana-dashboards-default
+        - name: storage
+          emptyDir: {}
+---
+# Source: grafana/templates/tests/test-serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    helm.sh/chart: grafana-6.48.0
+    app.kubernetes.io/name: grafana
+    app.kubernetes.io/instance: grafana
+    app.kubernetes.io/version: "9.3.1"
+    app.kubernetes.io/managed-by: Helm
+  name: grafana-test
+  namespace: default
+  annotations:
+    "helm.sh/hook": test-success
+    "helm.sh/hook-delete-policy": "before-hook-creation,hook-succeeded"
+---
+# Source: grafana/templates/tests/test-configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-test
+  namespace: default
+  annotations:
+    "helm.sh/hook": test-success
+    "helm.sh/hook-delete-policy": "before-hook-creation,hook-succeeded"
+  labels:
+    helm.sh/chart: grafana-6.48.0
+    app.kubernetes.io/name: grafana
+    app.kubernetes.io/instance: grafana
+    app.kubernetes.io/version: "9.3.1"
+    app.kubernetes.io/managed-by: Helm
+data:
+  run.sh: |-
+    @test "Test Health" {
+      url="http://grafana/api/health"
+
+      code=$(wget --server-response --spider --timeout 90 --tries 10 ${url} 2>&1 | awk '/^  HTTP/{print $2}')
+      [ "$code" == "200" ]
+    }
+---
+# Source: grafana/templates/tests/test.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: grafana-test
+  labels:
+    helm.sh/chart: grafana-6.48.0
+    app.kubernetes.io/name: grafana
+    app.kubernetes.io/instance: grafana
+    app.kubernetes.io/version: "9.3.1"
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+    "helm.sh/hook": test-success
+    "helm.sh/hook-delete-policy": "before-hook-creation,hook-succeeded"
+  namespace: default
+spec:
+  serviceAccountName: grafana-test
+  containers:
+    - name: grafana-test
+      image: "bats/bats:v1.4.1"
+      imagePullPolicy: "IfNotPresent"
+      command: ["/opt/bats/bin/bats", "-t", "/tests/run.sh"]
+      volumeMounts:
+        - mountPath: /tests
+          name: tests
+          readOnly: true
+  volumes:
+    - name: tests
+      configMap:
+        name: grafana-test
+  restartPolicy: Never

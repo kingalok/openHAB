@@ -1,0 +1,20 @@
+# apiVersion: argoproj.io/v1alpha1
+# kind: Application
+# metadata:
+#   name: codecommit
+#   namespace: argocd
+# spec:
+#   project: default
+#   source:
+#     repoURL: https://git-codecommit.eu-west-2.amazonaws.com/v1/repos/openHAB
+#     targetRevision: HEAD
+#     path: ./Infra/AWS/codecommit
+#   destination:
+#     server: https://kubernetes.default.svc
+#     namespace: argocd
+#   syncPolicy:
+#     syncOptions:
+#     automated:
+#       prune: true
+#       selfHeal: true
+  
