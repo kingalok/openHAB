@@ -4,3 +4,149 @@ Project Roles
 Team Lead
 Responsibilities
 Strategic Planning: Defining and implementing the strategic vision for the CI/CD pipeline, aligning it with business objectives and technological capabilities. Team Leadership: Leading and mentoring the build engineering team, ensuring they have the skills and resources to meet their objectives. Technical Architecture: Designing the structure of the CI/CD environment, making critical decisions around tool selection, workflow design, and system architecture. Quality Assurance: Setting quality standards and implementing Quality Gates to ensure that all code meets these standards before it is allowed to progress through the CI/CD pipeline. Project Management: Coordinating with other teams and stakeholders, managing timelines, and ensuring project deliverables are met. Continuous Improvement: Regularly reviewing and improving the CI/CD pipeline and processes, ensuring they remain effective and aligned with industry best practices.
+
+LIBERTY
+Project Description
+Implemented a Kubernetes (k8s) cloud-based solution for telecom companies to connect and control smart home devices using OpenHAB. Utilized an innovative design approach, leveraging GitOps and self-managed k8s clusters, which significantly streamlined deployment, release, and operational procedures.
+Project Roles
+Architect
+Responsibilities
+Strategic Planning and Cost Management: Devised a strategic plan promoting vendor neutrality, self-service, and cost reduction. Provided detailed cost estimates comparing AWS and Azure. Deployment Automation and Infrastructure Design: Minimized inter-team dependencies by automating deployment using self-managed control clusters and cloud-native tools. Utilized Kubernetes API extensions to create custom resource definitions (CRDs) through Crossplane, enhancing infrastructure design. System Configuration and Documentation: Developed comprehensive architectural diagrams and standard operating procedures. Configured an EKS cluster with custom kernel AMIs. Application Development and Performance Monitoring: Integrated Python-based Lambda functions with DynamoDB and CodeCommit for efficient serverless operations. Employed Prometheus, Grafana, and Tekton tasks for performance metric collection, application monitoring, and efficient image building via Kaniko.
+Team
+Team of 2 DevOps Engineer, 1 Tester and 2 Developer.
+Database
+DynamoDB
+Tools
+AWS Pricing Calculator, Azure Pricing Calculator, Microsoft Project, Jira, Asana, Kubernetes, Crossplane, Terraform, Ansible, EKS, Lambda, DynamoDB, CodeCommit, Prometheus, Grafana, Tekton, Kaniko
+Technologies
+Cloud Service Providers (AWS, Azure), Kubernetes API, Custom Resource Definitions (CRDs), Infrastructure as Code (IaC), Serverless Computing, Microservices, CI/CD pipelines.
+
+Accenture
+Technical Architect
+Jul 2021 - Aug 2022 (1 year 2 months)
+Customer and Customer Domain Description
+NHS Mail ( Location - Newcastle, UK )
+Project Description
+NHS Mail - Migrate the Portal from Monolithic to Microservices model. Design and Implement the Target Infrastructure.
+Project Roles
+Technical Architect
+Responsibilities
+Architecture and Strategy: Devised and implemented Microservice architecture and repository structure. Assisted the development team in adopting the 12-factor app and strangler fig application patterns for migration. DevOps and CI/CD Processes: Developed Azure DevOps pipelines and configured self-hosting Azure DevOps agents. Managed the release cycle using GitOps principles via ArgoCD. Cloud Infrastructure and Kubernetes Management: Maintained Azure Kubernetes Cluster and deployed applications using kustomise and terraform. Integrated Azure DevOps with various services like CosmosDB, Key Vault, and Service Bus. Security Measures and Compliance: Implemented security/vulnerability scanning tools and Azure policies. Configured Open Policy Agent for policy enforcement. Quality Assurance and Code Analysis: Installed SonarQube in the AKS cluster for continuous inspection of code quality. Instituted repository structure and branching strategy to streamline development processes. Monitoring and Performance Metrics: Established golden metrics for microservices using Prometheus and Grafana. Integrated application code with Application Insight for comprehensive transactional views.
+Team
+Developers - 6, Testers - 4, DevOps - 4.
+Database
+COSMO DB, MY SQL
+Tools
+Azure DevOps, ArgoCD, Kustomise, Terraform, Azure Services (CosmosDB, Key Vault, Service Bus), Security scanning tools (Grype/Syft), Azure Policy, Open Policy Agent, SonarQube, Prometheus, Grafana, Application Insight. Service Mesh - Linkerd.
+Technologies
+Microservices, GitOps, Kubernetes, Azure Kubernetes Service (AKS), Infrastructure as Code (IaC), Security & Compliance Policies, Code Quality Analysis, Performance Metrics.
+
+TATA Consultancy Services
+Senior DevOps Engineer
+Oct 2018 - Jun 2021 (2 years 9 months)
+Customer and Customer Domain Description
+AVIVA ( Location - Norwich, UK )
+Project Description
+AVIVA - ISA ( Infrastructure Services Improvement ) Platform Team - Responsible for designing and Implementing IT Projects for its clients.
+Project Roles
+Senior DevOps Engineer
+Responsibilities
+Infrastructure Design and Deployment: Designed and deployed infrastructure leveraging AWS core services for clients. Constructed and maintained Docker Container Images and applications within Kubernetes clusters. Developed a bakery process for creating Golden Images using Packer, Ansible, and Puppet. Continuous Integration and Delivery (CI/CD) Implementation: Implemented Jenkins pipelines using Groovy to deploy AWS infrastructure via Terraform. Streamlined plugin configurations across environments using Jenkins Configuration as Code (JCAC). Monitoring and Automation: Deployed and managed AppDynamics and Splunk infrastructure within AWS for monitoring and logging. Assisted development teams in automating their environment setup using Ansible and Puppet. Operational Support and Process Consultation: Assisted with internal passport processes, including Non-Functional Testing (NFT), Functional Testing (FT), and Disaster Recovery scenarios.
+Team
+The platform team - 20
+Database
+N/A
+Tools
+AWS Core Services, Docker, Kubernetes, Packer, Ansible, Puppet, Jenkins, Groovy, Terraform, Jenkins Configuration as Code (JCAC), AppDynamics, Splunk
+Technologies
+Infrastructure Design, Continuous Integration and Delivery (CI/CD), Monitoring, Automation, Environment Setup, Testing (NFT, FT), Disaster Recovery.
+
+TATA CONSULTANCY SERVICES
+SRE Engineer
+Aug 2015 - Oct 2018 (3 years 3 months)
+Customer and Customer Domain Description
+DuPont ( Location - Copenhagen, Denmark )
+Project Description
+DuPont - Centre of Excellence - Cloud Infrastructure Migration of workload from OnPremise to AWS Cloud.
+Project Roles
+SRE Engineer
+Responsibilities
+Migration Strategy and Analysis: Participated in devising migration strategy through due diligence. Performed analysis of the existing infrastructure landscape, network, and its dependencies. CI/CD Implementation and Infrastructure Deployment: Implemented the landing zone for migrating applications. Configured Jenkins master and slave servers, integrating with AWS. Developed pipelines to deploy the infrastructure in AWS. Environment Automation and Monitoring: Assisted the development team in automating the environment setup using tools like Ansible/Puppet. Deployed and integrated Splunk infrastructure within AWS for robust monitoring.
+Team
+Team - 15
+Tools
+AWS, Jenkins, Terraform, Ansible,Puppet
+Technologies
+AWS, Jenkins, Terraform, Ansible,Puppet
+
+TATA CONSULTANCY SERVICES
+Solutions Architect
+Jul 2010 - Jul 2015 (5 years 1 month)
+Customer and Customer Domain Description
+European Commission ( Location - Luxembourg )
+Project Description
+OASIS - European Commission
+Project Roles
+Solutions Architect
+Responsibilities
+Operational Management and Technical Maintenance: Provided operational management, technical maintenance, troubleshooting, and tuning & architecting of both FC SAN (Brocade) & Storage (CX4/DMX/USP/VSP/G1000). Investigated and resolved storage performance issues. Created scripts for monitoring and managing the storage/SAN switches. Design and Deployment: Designed and deployed Fiber channel network (SAN), including blueprinting, migration, and modeling. Researched and developed designs, including a strategic roadmap for all infrastructure SAN/storage devices and associated software and tools, ensuring enterprise-wide architecture consistency. Assumed the role of Architect in projects concerning SAN Fabrics. Monitoring, Reporting, and Documentation: Monitored and reported on SAN fabric on a regular basis and interacted with the client’s ticketing system to guide workflow. Wrote technical documents and developed a manual for SAN and Storage.
+Team
+Team - 20
+Tools
+EMC Symmetrix, DMX, Hitachi USP, VSP, G1000, Brocade SAN Switches FC Series ( 16GB) DCX Directors, BASH Shell Scripting.
+Technologies
+EMC Symmetrix, DMX, Hitachi USP, VSP, G1000, Brocade SAN Switches FC Series ( 16GB) DCX Directors, BASH Shell Scripting.
+
+TATA CONSULTANCY SERVICES
+Server & Storage Administrator
+Sep 2008 - Feb 2010 (1 year 6 months)
+Customer and Customer Domain Description
+ARAMCO ( Location - Riyadh/Al-khobar - KSA )
+Project Description
+ARAMCO - This is a support project for SAP Applications, Storage, and Data Centre.
+Project Roles
+Server & Storage Administrator
+Responsibilities
+Server and Storage Administration: Administered and managed a pool of RedHat Linux/SUN Solaris servers. Configured and Administered SUN Storage FC 6140 Array. Implemented SAN Fabric, including configuration and enhancing platform security. Connected two data centers spread across the same city. Operational Management and Support: Performed daily operational activities. Provided 24/7 technical support for the SAP Application team. Involved in the Disaster Recovery of SAP Applications. System Assessment and Documentation: Assessed operating system and suggested storage architecture solutions, including the sizing for SAP Application. Performed complete documentation of all systems, including system design, operational history, backup program, disaster recovery procedures, and patches.
+Team
+Team - 4
+Tools
+Redhat Linux,Sun Solaris, SUN Storage FC 6140 Array, Brocade FC Switches
+Technologies
+Redhat Linux,Sun Solaris, SUN Storage FC 6140 Array, Brocade FC Switches
+
+TATA CONSULTANCY SERVICES
+Linux Server Administrator
+Jun 2007 - Aug 2008 (1 year 3 months)
+Customer and Customer Domain Description
+WOOLWORTHS ( Location - Sydney, AU )
+Project Description
+Woolworths - Infrastructure Support.
+Project Roles
+Linux Server Administrator
+Responsibilities
+Server Administration and Management: Administered and managed Redhat Linux servers. Implemented Firewall rules in IPTables. Involved in setting up of Redhat Satellite network. System Monitoring and Troubleshooting: Monitored the servers and Linux scripts regularly and performed troubleshooting. Performed routine checks on the Linux servers. Involved in System performance monitoring. Data Management and Script Migration: Maintained necessary back-up of the important files and documented Linux scripts for future reference. Migrated scripts from HP-UX to Redhat Linux.
+Team
+Team - 4
+Tools
+RedHat Linux, HP-UX, Shell Scripting
+Technologies
+RedHat Linux, HP-UX, Shell Scripting
+
+TATA CONSULTANCY SERVICES
+System and Field Engineer
+Jan 2006 - Apr 2007 (1 year 4 months)
+Customer and Customer Domain Description
+Multiple Research Organization
+Project Description
+Research Org ( Location - Bangalore, India )
+Project Roles
+System and Field Engineer
+Responsibilities
+Server Administration and Configuration: Acted as the Resident Server Administrator in JNCASR IT Department, managing DNS, Web & Proxy Servers. Configured and maintained load sharing mail server, incorporating Redhat Cluster Suite 4, Squirrel mail, sendmail, GFS, and SunStoredge 3510 FC arrays (DAS). Implemented rack mounted servers with installation and configuration. Cluster Implementation and Management: Installed and managed a 64 Node Cluster of Sun X4100 Servers in NCBS, with Sun X4200 as the master node and Mellanox Infiniband for node communication. Deployed a 21 Nodes Cluster of Sun V20Z Servers in JNCASR using Beowulf cluster (OS – rocks) and various cluster tools and compilers. Installed and managed a 6 Node Cluster of Sun X4100 in Raman Research Institute using Beowulf cluster (OS – rocks). Participated in the physical installation of servers, including rack mounting and configuration tasks.
+Team
+Team - 4
+Tools
+DNS, Web & Proxy Servers, Redhat Cluster Suite 4, Squirrel mail, sendmail, GFS, SunStoredge 3510 FC arrays (DAS), Sun X4100 Servers, Sun X4200, Mellanox Infiniband, Beowulf cluster (OS – rocks), Various cluster tools and compilers.
+Technologies
+Server Administration, Server Configuration, Load Sharing Mail Server, Rack Mounted Servers, Node Cluster Implementation and Management.
